@@ -1,8 +1,8 @@
 'use strict';
 
 const isPrime = (num) => {
-    if (!Number.isInteger(num) || num <= 0) {
-        return console.log(`Введите целое положительное число`);
+    if (!Number.isInteger(num) || num <= 1) {
+        return false;
     }
     for(let i = 2; i < 10; i ++) {
         if (num % i === 0 && num !== i) {
