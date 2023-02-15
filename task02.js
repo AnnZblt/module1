@@ -1,14 +1,13 @@
 'use strict';
 
 const isPrime = (num) => {
-    if (!Number.isInteger(num) || num <= 1) {
-        return false;
-    }
+    
     for(let i = 2; i < 10; i ++) {
-        if (num % i === 0 && num !== i) {
+        if (num % i === 0 && num !== i || num < 2) {
             return false;
         } 
     };
+
     return true;
 };
 
