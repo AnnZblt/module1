@@ -6,11 +6,12 @@ const isPrime = (num) => {
     }
     for(let i = 2; i < 10; i ++) {
         if (num % i === 0 && num !== i) {
-            return console.log(false, `${num} составное число`);
+            return false;
         } 
     };
-    return console.log(true, `${num} простое число`);
+    return true;
 };
 
-isPrime();
-
+for (let i = 0, count = 0; i < 100; i++) {
+    isPrime(i) && console.log(`${++count}. простое число ${i}`);
+};
