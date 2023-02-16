@@ -1,9 +1,12 @@
 'use strict';
 
 const isPrime = (num) => {
-    
-    for(let i = 2; i < 10; i ++) {
-        if (num % i === 0 && num !== i || num < 2) {
+    if (num < 2) {
+        return false;
+    };
+
+    for(let i = 2; i <= num; i ++) {
+        if (num % i === 0 && num !== i) {
             return false;
         } 
     };
@@ -11,6 +14,6 @@ const isPrime = (num) => {
     return true;
 };
 
-for (let i = 0, count = 0; i < 100; i++) {
-    isPrime(i) && console.log(`${++count}. простое число ${i}`);
+for (let n = 0, count = 0; n < 100; n++) {
+    isPrime(n) && console.log(`${++count}. простое число ${n}`);
 };
