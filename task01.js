@@ -1,3 +1,5 @@
+'use strict';
+
 const filter = (all, failed) => {
     const passedStudents = [];
     for (const i in all) {
@@ -8,4 +10,9 @@ const filter = (all, failed) => {
     return passedStudents;
 };
 
-filter();
+//filter();
+
+const allStudents = ['Иванов', 'Петров', 'Сидоров', 'Таков', 'Сяков', 'Козлов', 'Коров', 'Котиков'];
+const failedStudents = ['Сидоров', 'Сяков', 'Котиков'];
+
+console.log(`Результат ... : ${filter(allStudents, failedStudents)}`);

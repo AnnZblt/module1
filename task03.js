@@ -8,4 +8,7 @@ const addPrefix = (names, prefix = 'Mr') => {
     return prefixNames;
 }
 
-addPrefix();
+//addPrefix();
+
+const names= ['Noah', 'Liam', 'Mason', 'Jacob', 'Robot', 'William', 'Ethan', 'Michael', 'Alexander'];
+console.log(`Результат ... : ${addPrefix(names)}`);
