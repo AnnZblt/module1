@@ -1,20 +1,28 @@
 'use strict';
-
 const getAveragePriceGoods = (arr) => {
-    let averageSum = 0;
     let averagePrice = 0;
+    let averageGoods = 0;
     const averagePriceArr = [];
+    const averageGoodsArr = [];
+
     for (const i in arr) {
         const [count, sum] = arr[i];
-        averageSum = sum / count;
-        averagePriceArr.push(averageSum);
+        averagePriceArr.push(sum);
+        averageGoodsArr.push(count);  
     }
+
     for (const j of averagePriceArr) {
     averagePrice += j;
     }
-    averagePrice =  averagePrice/ averagePriceArr.length;
-    return Math.floor(averagePrice);
-};
+    
+    for (const k of averageGoodsArr) {
+    averageGoods += k;
+    }
+
+    let averagePriceGoods = Math.floor(averagePrice / averageGoods);
+    return averagePriceGoods;
+}
+
 //getAveragePriceGoods();
 
 const allСashbox = [
