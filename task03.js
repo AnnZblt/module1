@@ -6,12 +6,16 @@ const randomNumberGenerator = (count = 1, n = 1, m = 100, type) => {
     return `Введите обязательные параметры`;
     }
 
+    if (n > m) {
+        [n, m] = [m, n];
+    }
+
     const newArr = [];
     n = Math.ceil(n);
     m = Math.floor(m);
 
     for (let i = 0; i < count; i++) {
-        let randomNumber = Math.floor(Math.random() * (m - n + 1)) + n;
+        let randomNumber = Math.floor(Math.random() * (m - n)) + n;
     
         if (type === 'even' && randomNumber % 2 !== 0) {
             randomNumber ++;
@@ -26,4 +30,4 @@ const randomNumberGenerator = (count = 1, n = 1, m = 100, type) => {
 };
 
 //randomNumberGenerator();
-console.log(`Генератор создал следующие числa: ${randomNumberGenerator(3, 0, 100, 'even')}`) ;
+console.log(`Генератор создал следующие числa: ${randomNumberGenerator(100, 10, -10, 'even')}`) ;

@@ -19,4 +19,4 @@ const getRandomLeapYear = (n, m) => {
 };
 
 //getRandomLeapYear();
-console.log(`Список високосных лет в заданном диапазоне: ${getRandomLeapYear(2000, 1960)}`);
+console.log(`Список високосных лет в заданном диапазоне: `, getRandomLeapYear(2000, 1960));

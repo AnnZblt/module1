@@ -6,6 +6,10 @@ const randomNumberGenerator = (count = 1, n = 1, m = 100) => {
         return `Введите обязательные параметры`;
     }
 
+    if (n > m) {
+        [n, m] = [m, n];
+    }
+
     const newArr = [];
     n = Math.ceil(n);
     m = Math.floor(m);
