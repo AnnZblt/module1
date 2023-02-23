@@ -11,11 +11,10 @@ const randomNumberGenerator = (count = 1, n = 1, m = 100, type) => {
     }
 
     const newArr = [];
-    n = Math.ceil(n);
-    m = Math.floor(m);
+    const noneType = !['even', 'odd'].includes(type);
 
     for (let i = 0; i < count; i++) {
-        let randomNumber = Math.floor(Math.random() * (m - n)) + n;
+        let randomNumber = Math.floor(Math.random() * (m - n + +noneType)) + n;
     
         if (type === 'even' && randomNumber % 2 !== 0) {
             randomNumber ++;
@@ -30,4 +29,4 @@ const randomNumberGenerator = (count = 1, n = 1, m = 100, type) => {
 };
 
 //randomNumberGenerator();
-console.log(`Генератор создал следующие числa: ${randomNumberGenerator(100, 10, -10, 'even')}`) ;
+console.log(`Генератор создал следующие числa:`, randomNumberGenerator(100, 10, -10, 'even'));

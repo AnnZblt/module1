@@ -9,4 +9,4 @@ const randomNumberGenerator = (count = 1) => {
 }
 
 //randomNumberGenerator();
-console.log(`Генератор создал следующие числа: ${randomNumberGenerator(3)}`);
+console.log(`Генератор создал следующие числа:`, randomNumberGenerator(3));

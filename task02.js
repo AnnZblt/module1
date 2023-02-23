@@ -21,4 +21,4 @@ const randomNumberGenerator = (count = 1, n = 1, m = 100) => {
 }
 
 //randomNumberGenerator();
-console.log(`Генератор создал следующие числа: ${randomNumberGenerator(5, 10, 100)}`);
+console.log(`Генератор создал следующие числа:`, randomNumberGenerator(5, 10, 100));
