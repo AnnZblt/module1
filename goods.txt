@@ -1,0 +1,23 @@
+const goods = [
+    {
+        productName : 'PlayStation 5',
+        productAmount : 4,
+        productCategory : 'Game console',
+        productPrice : 500,
+        currency : '$',
+    },
+    {
+        productName : 'DualSense',
+        productAmount : 8,
+        productCategory : 'Game console devices',
+        productPrice : 200,
+        currency : '$',
+    },
+    {
+        productName : 'Xbox Series S',
+        productAmount : 3,
+        productCategory : 'Game console',
+        productPrice : 250,
+        currency : '$',
+    }
+];
