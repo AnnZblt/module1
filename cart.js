@@ -1,46 +1,67 @@
-'use strict';
+"use strict";
 
 const cart = {
-    items: [],
-    totalPrice: 0,
-    count: 0,
+  items: [],
+  count: 0,
 
-    add(productName, productPrice, productAmount = 1) {
-        const product =  {
-            productName,
-            productPrice,
-            productAmount,
-        };
-        this.items.push(product);
-        this.increaseCount(productAmount);
-    },
+  get totalPrice() {
+    return this.calculateItemPrice();
+  },
 
-    increaseCount(n) {
-        this.count += n;
-    },
+  add(productName, productPrice, productAmount = 1) {
+    const product = {
+      productName,
+      productPrice,
+      productAmount,
+    };
+    this.items.push(product);
+    this.increaseCount(productAmount);
+  },
 
-    calculateItemPrice() {
-        let productSum = 0;
-        for (let i = 0; i < this.items.length; i++) {
-            productSum = productSum + (this.items[i].productAmount * this.items[i].productPrice);
-        }
-        return productSum;
-    },
+  increaseCount(n) {
+    this.count += n;
+  },
 
-    print() {
-        console.log(JSON.stringify(this.items));
-        console.log(`Общая стоимость корзины: `, this.totalPrice);
-    },
+  calculateItemPrice() {
+    const productSum = this.items.reduce((acc, i) => {
+      return acc + i.productAmount * i.productPrice;
+    }, 0);
+    return productSum;
+  },
 
-    clear() {
-        this.items = [];
-        this.count =  0;
-    },
+  print() {
+    console.log(JSON.stringify(this.items));
+    console.log(`Общая стоимость корзины: `, this.totalPrice);
+  },
 
-}
+  clear() {
+    this.items = [];
+    this.count = 0;
+  },
+};
 
-Object.defineProperty( cart, 'totalPrice', {
-    get() {
-        return this.calculateItemPrice();
-    }
-});
+//Проверяем объекты в корзине
+console.log(`В корзине: `, cart.items);
+console.log(`Сумма товаров в корзине: `, cart.totalPrice);
+console.log(`Количество товаров в корзине: `, cart.count);
+
+//Добавляем товары
+cart.add("PlayStation 5", 500, 2);
+cart.add("Dualsense", 200, 4);
+cart.add("Xbox S", 250, 1);
+
+//Проверяем объекты в корзине после наполнения
+console.log(`В корзине: `, cart.items);
+console.log(`Сумма товаров в корзине: `, cart.totalPrice);
+console.log(`Количество товаров в корзине: `, cart.count);
+
+//Выводим содержимое корзины
+cart.print();
+
+//Чистим корзину
+cart.clear();
+
+//Проверяем ее наполнение после очистки
+console.log(`В корзине: `, cart.items);
+console.log(`Сумма товаров в корзине: `, cart.totalPrice);
+console.log(`Количество товаров в корзине: `, cart.count);

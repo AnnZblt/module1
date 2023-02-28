@@ -24443,13 +24443,13 @@ const listIPv4 = [
   "10.114.96.70",
   "10.195.201.68",
   "10.78.125.206",
-  "10.0.32.20"
+  "10.0.32.20",
 ];
 
 /*
 const getUniqueIpCount = (arr) => {
     const uniqueIp = new Set(arr);
-    console.log(uniqueIp.size);
+    return uniqueIp.size;
 };
 
 console.log(`Количество уникальных IP: `, getUniqueIpCount(listIPv4));
