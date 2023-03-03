@@ -2,35 +2,35 @@
 
 const rectangle = {
   unit: 'см',
-  width: `5 см`,
-  height: `5 см`,
-  perimeter: 0,
-  area: 0,
+  _width: 5,
+  _height: 5,
 
-  get newWidth() {
-    return `${this.width} ${this.unit}`;
+  get width() {
+    return `${this._width}${this.unit}`;
   },
-  set newWidth(value) {
+
+  set width(value) {
     if (typeof value !== 'string') {
-      this.width = value;
+      this._width = value;
     }
   },
 
-  get newHeight() {
-    return `${this.height} ${this.unit}`;
+  get height() {
+    return `${this._height}${this.unit}`;
   },
-  set newHeight(value) {
+
+  set height(value) {
     if (typeof value !== 'string') {
-      this.height = value;
+      this._height = value;
     }
   },
 
-  getPerimeter(w = this.width, h = this.height) {
-    return this.perimeter = (w * 2) + (h * 2);
+  get perimeter() {
+    return ((this._width + this._height) * 2) + this.unit;
   },
 
-  getArea() {
-    return this.area = this.width * this.height;
+  get area() {
+    return this._width * this._height + this.unit;
   },
 };
 
@@ -38,17 +38,14 @@ const rectangle = {
 console.log(`Ширина: `, rectangle.width);
 console.log(`Высота: `, rectangle.height);
 
-rectangle.newWidth = 20;
-rectangle.newHeight = 10;
+console.log(`Периметр: `, rectangle.perimeter);
+console.log(`Площадь: `, rectangle.area);
 
-console.log(rectangle.width);
-console.log(rectangle.height);
+rectangle.width = 20;
+rectangle.height = 10;
 
-console.log(`Новая ширина: `, rectangle.newWidth);
-console.log(`Новая высота: `, rectangle.newHeight);
+console.log(`Новая ширина: `, rectangle.width);
+console.log(`Новая высота: `, rectangle.height);
 
-rectangle.getArea();
-rectangle.getPerimeter();
-
-console.log(`Периметр: `, rectangle.perimeter, rectangle.unit);
-console.log(`Площадь: `, rectangle.area, rectangle.unit);
+console.log(`Периметр: `, rectangle.perimeter);
+console.log(`Площадь: `, rectangle.area);
