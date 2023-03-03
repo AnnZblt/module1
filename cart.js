@@ -3,19 +3,19 @@
 const cart = {
   items: [],
   count: 0,
-  discount: 0,
+  _discount: 0,
 
   get totalPrice() {
     return this.calculateItemPrice();
   },
 
-  set setDiscount(value) {
+  set discount(value) {
     const promocode = value.toString().toUpperCase().trim();
     if (promocode === 'METHED') {
-      this.discount = 15;
+      this._discount = 15;
     }
     if (promocode === 'NEWYEAR') {
-      this.discount = 21;
+      this._discount = 21;
     }
   },
 
@@ -61,9 +61,9 @@ console.log(`Количество товаров в корзине: `, cart.coun
 cart.add('PlayStation 5', 500, 2);
 cart.add('Dualsense', 200, 4);
 cart.add('Xbox S', 250, 1);
-// cart.setDiscount = 'methed   ';
-// cart.setDiscount = 'NewYear';
-// cart.setDiscount = 123;
+// cart.discount = 'methed   ';
+// cart.discount = 'NewYear';
+// cart.discount = 123;
 console.log(`Скидка по промокоду ${cart.discount}%`);
 
 // Проверяем объекты в корзине после наполнения
