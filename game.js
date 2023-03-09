@@ -7,17 +7,8 @@
   const getRandomIntInclusive = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
-    let pcAnswer;
-    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    if (randomNumber === 0) {
-      return pcAnswer = figuresRus[0];
-    }
-    if (randomNumber === 1) {
-      return pcAnswer = figuresRus[1];
-    }
-    if (randomNumber === 2) {
-      return pcAnswer = figuresRus[2];
-    }
+    const pcAnswer = Math.floor(Math.random() * (max - min + 1)) + min;
+    return pcAnswer;
   };
 
   const getFigure = (lang) => {
@@ -25,29 +16,30 @@
     - камень
     - ножницы
     - бумага`, '');
-
-    const rock = ['к', 'ка', 'кам', 'каме', 'камен', 'камень'];
-    const paper = ['б', 'бу', 'бум', 'бума', 'бумаг', 'бумага'];
-    const scissors = ['н', 'но', 'нож', 'ножн', 'ножни', 'ножниц', 'ножницы'];
-
     let playerAnswer;
+    let allFigures = [];
+
+    if (answer === null) {
+      alert(`Уже уходите?`);
+      return playerAnswer = null;
+    }
+
+    figuresRus.map((item) => {
+      for (let i = 1; i <= item.length; i++) {
+        allFigures.push(item.slice(0, i));
+        if (allFigures.includes(answer.toLowerCase().trim())) {
+          allFigures = [];
+          return playerAnswer = item;
+        }
+      }
+    });
+
     switch (true) {
-      case answer === null:
-        alert(`Поиграем в следующий раз :)`);
-        return answer;
-
-      case rock.includes(answer.toLowerCase().trim()):
-        return playerAnswer = figuresRus[0];
-
-      case paper.includes(answer.toLowerCase().trim()):
-        return playerAnswer = figuresRus[1];
-
-      case scissors.includes(answer.toLowerCase().trim()):
-        return playerAnswer = figuresRus[2];
+      case figuresRus.includes(playerAnswer):
+        return playerAnswer = figuresRus.indexOf(playerAnswer, 0);
 
       default:
-        alert(`Для продолжения игры нужно ввести одну из 3-х фигур.`);
-        return answer;
+        return playerAnswer = -1;
     }
   };
 
@@ -57,70 +49,91 @@
       computer: 0,
     };
 
-    const msg = [`Продолжить игру?`,
-      `Вы набрали очков:  `,
-      `Бот набрал очков: `,
-      `Вы победили, поздравляем!`,
-      `Победил бот.`,
-      `Победила дружба :)`,
-      `Вы выбрали `,
-      `Бот выбрал `,
-      `+1 очко в вашу копилку`,
-      `+1 очко боту`,
-      `Ничья`,
-    ];
+    const msgRus = {
+      continue: `Продолжить игру?`,
+      playerPoints: `Вы набрали очков:`,
+      pcPoints: `Бот набрал очков:`,
+      playerWin: `Вы победили, поздравляем!`,
+      pcWin: `Победил бот.`,
+      friendshipWin: `Победила дружба :)`,
+      playerFigure: `Вы выбрали`,
+      pcFigure: `Бот выбрал`,
+      playerPlusPoints: `+1 очко в вашу копилку`,
+      pcPlusPoints: `+1 очко боту`,
+      drawPlusPoints: `Ничья`,
+      figureEnter: `Для продолжения игры нужно ввести одну из 3-х фигур`,
+      seeU: `Поиграем в следующий раз :)`,
+    };
+
+    const msgEng = {
+      continue: `Do you want to continue the game?`,
+      playerPoints: `Your points are: `,
+      pcPoints: `Bot points are: `,
+      playerWin: `You win, congratulations!`,
+      pcWin: `Bot won.`,
+      friendshipWin: `Friendship won :)`,
+      playerFigure: `You chose `,
+      pcFigure: `Bot chose `,
+      playerPlusPoints: `+1 point to you`,
+      pcPlusPionts: `+1 point for bot`,
+      drawPlusPoints: `Draw`,
+      figureEnter: `To continue the game you need to enter
+one of the 3 figures`,
+      seeU: `Let's play another time :)`,
+    };
 
     return function start() {
       const playerChoise = getFigure();
       const pcChoise = getRandomIntInclusive(0, 2);
 
-      const rock = figuresRus[0];
-      const paper = figuresRus[1];
-      const scissors = figuresRus[2];
-
       const newGame = () => {
-        const agree = confirm(msg[0]);
+        const agree = confirm(msgRus.continue);
         if (agree) {
           return start();
         } else {
-          alert(`${msg[1]}${result.player}
-${msg[2]}${result.computer}`);
+          alert(`${msgRus.playerPoints}${result.player}
+${msgRus.pcPoints}${result.computer}`);
           if (result.player > result.computer) {
-            return alert(msg[3]);
+            return alert(msgRus.playerWin);
           } else if (result.player < result.computer) {
-            return alert(msg[4]);
+            return alert(msgRus.pcWin);
           } else {
-            return alert(msg[5]);
+            return alert(msgRus.friendshipWin);
           }
         }
       };
 
-      if (!figuresRus.includes(playerChoise) || playerChoise === null) {
+      if (playerChoise === null) {
+        alert(msgRus.seeU);
+      } else if (playerChoise === -1) {
+        alert(msgRus.figureEnter);
         newGame();
       } else {
-        if (playerChoise === rock && pcChoise === scissors ||
-            playerChoise === paper && pcChoise === rock ||
-            playerChoise === scissors && pcChoise === paper) {
-          result.player += 1;
-          alert(`${msg[6]} ${playerChoise} 
-${msg[7]} ${pcChoise}
-${msg[8]}`);
-        } else if (pcChoise === rock && playerChoise === scissors ||
-          pcChoise === paper && playerChoise === rock ||
-          pcChoise === scissors && playerChoise === paper) {
-          result.computer += 1;
-          alert(`${msg[6]}${playerChoise} 
-${msg[7]}${pcChoise}
-${msg[9]}`);
-        } else {
-          alert(`${msg[6]} ${playerChoise} 
-${msg[7]} ${pcChoise}
-${msg[10]}`);
+        switch ((playerChoise - pcChoise + 3) % 3) {
+          case 1:
+            alert(`${msgRus.playerFigure} ${figuresRus[playerChoise]}
+${msgRus.pcFigure} ${figuresRus[pcChoise]}
+${msgRus.playerPlusPoints}`);
+            result.player += 1;
+            return newGame();
+
+          case 2:
+            alert(`${msgRus.playerFigure} ${figuresRus[playerChoise]}
+${msgRus.pcFigure} ${figuresRus[pcChoise]}
+${msgRus.pcPlusPoints}`);
+            result.computer += 1;
+            return newGame();
+
+          default:
+            alert(`${msgRus.playerFigure} ${figuresRus[playerChoise]}
+${msgRus.pcFigure} ${figuresRus[pcChoise]}
+${msgRus.drawPlusPoints}`);
+            return newGame();
         }
-        newGame();
       }
 
-      console.log(`Player `, playerChoise, `; pc `, pcChoise);
+      console.log(`Player `, figuresRus[playerChoise],
+        `; pc `, figuresRus[pcChoise]);
     };
   };
 
