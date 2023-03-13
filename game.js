@@ -2,7 +2,7 @@
 
 (() => {
   const figuresRus = ['камень', 'бумага', 'ножницы'];
-  // const figuresEng = ['rock', 'paper', 'scissors'];
+  const figuresEng = ['rock', 'paper', 'scissors'];
 
   const getRandomIntInclusive = (min, max) => {
     min = Math.ceil(min);
@@ -11,20 +11,37 @@
     return pcAnswer;
   };
 
-  const getFigure = (lang) => {
-    const answer = prompt(`Бот загадывает фигуру. Парируйте его атаку, выберите:
+  const getFigure = (lang = 'RU') => {
+    let figures = figuresRus;
+    let getFiguresMsg = {
+      mainQuestion: `Бот загадывает фигуру. Парируйте его атаку, выберите:
     - камень
     - ножницы
-    - бумага`, '');
+    - бумага`,
+      escapeGame: `Уже уходите?`,
+    };
+
+    if (lang.toUpperCase === 'EN' || lang.toUpperCase === 'ENG') {
+      figures = figuresEng;
+      getFiguresMsg = {
+        mainQuestion: `Bot guesses a shape. Parry his attack, choose:
+      - rock
+      - paper
+      - scissors`,
+        escapeGame: `Leaving already?`,
+      };
+    }
+
+    const answer = prompt(getFiguresMsg.mainQuestion, '');
     let playerAnswer;
     let allFigures = [];
 
     if (answer === null) {
-      alert(`Уже уходите?`);
+      alert(getFiguresMsg.escapeGame);
       return playerAnswer = null;
     }
 
-    figuresRus.map((item) => {
+    figures.map((item) => {
       for (let i = 1; i <= item.length; i++) {
         allFigures.push(item.slice(0, i));
         if (allFigures.includes(answer.toLowerCase().trim())) {
@@ -35,21 +52,22 @@
     });
 
     switch (true) {
-      case figuresRus.includes(playerAnswer):
-        return playerAnswer = figuresRus.indexOf(playerAnswer, 0);
+      case figures.includes(playerAnswer):
+        return playerAnswer = figures.indexOf(playerAnswer, 0);
 
       default:
         return playerAnswer = -1;
     }
   };
 
-  const game = (language) => {
+  const game = (language = 'RU') => {
     const result = {
       player: 0,
       computer: 0,
     };
 
-    const msgRus = {
+    let figures = figuresRus;
+    let msg = {
       continue: `Продолжить игру?`,
       playerPoints: `Вы набрали очков:`,
       pcPoints: `Бот набрал очков:`,
@@ -65,77 +83,80 @@
       seeU: `Поиграем в следующий раз :)`,
     };
 
-    const msgEng = {
-      continue: `Do you want to continue the game?`,
-      playerPoints: `Your points are: `,
-      pcPoints: `Bot points are: `,
-      playerWin: `You win, congratulations!`,
-      pcWin: `Bot won.`,
-      friendshipWin: `Friendship won :)`,
-      playerFigure: `You chose `,
-      pcFigure: `Bot chose `,
-      playerPlusPoints: `+1 point to you`,
-      pcPlusPionts: `+1 point for bot`,
-      drawPlusPoints: `Draw`,
-      figureEnter: `To continue the game you need to enter
-one of the 3 figures`,
-      seeU: `Let's play another time :)`,
-    };
+    if (language.toUpperCase === 'EN' || language.toUpperCase === 'ENG') {
+      figures = figuresEng;
+      msg = {
+        continue: `Do you want to continue the game?`,
+        playerPoints: `Your points are: `,
+        pcPoints: `Bot points are: `,
+        playerWin: `You win, congratulations!`,
+        pcWin: `Bot won.`,
+        friendshipWin: `Friendship won :)`,
+        playerFigure: `You chose`,
+        pcFigure: `Bot chose`,
+        playerPlusPoints: `+1 point to you`,
+        pcPlusPoints: `+1 point for bot`,
+        drawPlusPoints: `Draw`,
+        figureEnter: `To continue the game you need to enter
+  one of the 3 figures`,
+        seeU: `Let's play another time :)`,
+      };
+    }
 
     return function start() {
-      const playerChoise = getFigure();
+      const playerChoise = getFigure(language);
       const pcChoise = getRandomIntInclusive(0, 2);
 
       const newGame = () => {
-        const agree = confirm(msgRus.continue);
+        const agree = confirm(msg.continue);
         if (agree) {
           return start();
         } else {
-          alert(`${msgRus.playerPoints}${result.player}
-${msgRus.pcPoints}${result.computer}`);
+          alert(`${msg.playerPoints}${result.player}
+${msg.pcPoints}${result.computer}`);
           if (result.player > result.computer) {
-            return alert(msgRus.playerWin);
+            return alert(msg.playerWin);
           } else if (result.player < result.computer) {
-            return alert(msgRus.pcWin);
+            return alert(msg.pcWin);
           } else {
-            return alert(msgRus.friendshipWin);
+            return alert(msg.friendshipWin);
           }
         }
       };
 
       if (playerChoise === null) {
-        alert(msgRus.seeU);
+        newGame();
+        alert(msg.seeU);
       } else if (playerChoise === -1) {
-        alert(msgRus.figureEnter);
+        alert(msg.figureEnter);
         newGame();
       } else {
         switch ((playerChoise - pcChoise + 3) % 3) {
           case 1:
-            alert(`${msgRus.playerFigure} ${figuresRus[playerChoise]}
-${msgRus.pcFigure} ${figuresRus[pcChoise]}
-${msgRus.playerPlusPoints}`);
+            alert(`${msg.playerFigure} ${figures[playerChoise]}
+${msg.pcFigure} ${figures[pcChoise]}
+${msg.playerPlusPoints}`);
             result.player += 1;
             return newGame();
 
           case 2:
-            alert(`${msgRus.playerFigure} ${figuresRus[playerChoise]}
-${msgRus.pcFigure} ${figuresRus[pcChoise]}
-${msgRus.pcPlusPoints}`);
+            alert(`${msg.playerFigure} ${figures[playerChoise]}
+${msg.pcFigure} ${figures[pcChoise]}
+${msg.pcPlusPoints}`);
             result.computer += 1;
             return newGame();
 
           default:
-            alert(`${msgRus.playerFigure} ${figuresRus[playerChoise]}
-${msgRus.pcFigure} ${figuresRus[pcChoise]}
-${msgRus.drawPlusPoints}`);
+            alert(`${msg.playerFigure} ${figures[playerChoise]}
+${msg.pcFigure} ${figures[pcChoise]}
+${msg.drawPlusPoints}`);
             return newGame();
         }
       }
-
-      console.log(`Player `, figuresRus[playerChoise],
-        `; pc `, figuresRus[pcChoise]);
+      console.log(`Player `, figures[playerChoise],
+        `; pc `, figures[pcChoise]);
     };
   };
 
-  window.rps = game();
+  window.rps = game;
 })();
