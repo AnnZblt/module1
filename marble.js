@@ -271,10 +271,3 @@ ${msg.draw}`);
   };
   window.marble = game();
 })();
-
-/*
-const startGame = window.marble;
-startGame();
-*/
-
-
