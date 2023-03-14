@@ -118,6 +118,20 @@
       pcLose: `У бота не осталось шариков, вы выиграли!`,
       playerLose: `У вас не осталось шариков, вы проиграли.`,
       playerBalance: `У вас осталось шариков`,
+      newGame: `Хотите сыграть еще раз?`,
+    };
+
+    const newGame = () => {
+      if (ballsCount.pc === 0 || ballsCount.player === 0) {
+        const agree = confirm(msg.newGame);
+        if (agree) {
+          ballsCount.pc = 5;
+          ballsCount.player = 5;
+          return game();
+        } else {
+          return alert(msg.seeU);
+        }
+      }
     };
 
     const playerMove = () => {
@@ -204,6 +218,20 @@ ${msg.draw}`);
     let fate = rps();
 
     return function start() {
+      const newGame = () => {
+        if (ballsCount.pc === 0 || ballsCount.player === 0) {
+          const agree = confirm(msg.newGame);
+          if (agree) {
+            ballsCount.pc = 5;
+            ballsCount.player = 5;
+            rps();
+            return start();
+          } else {
+            return alert(msg.seeU);
+          }
+        }
+      };
+
       switch (true) {
         case fate === 0:
           return alert(msg.seeU);
@@ -211,7 +239,10 @@ ${msg.draw}`);
           playerMove();
           switch (true) {
             case ballsCount.player <= 0:
-              return alert(msg.playerLose);
+              ballsCount.player = 0;
+              ballsCount.pc = 10;
+              alert(msg.playerLose);
+              return newGame();
 
             case ballsCount.pc <= 0:
               ballsCount.pc = 0;
@@ -224,12 +255,14 @@ ${msg.draw}`);
                 case ballsCount.player <= 0:
                   ballsCount.player = 0;
                   ballsCount.pc = 10;
-                  return alert(msg.playerLose);
+                  alert(msg.playerLose);
+                  return newGame();
 
                 case ballsCount.pc <= 0:
                   ballsCount.pc = 0;
                   ballsCount.player = 10;
-                  return alert(msg.pcLose);
+                  alert(msg.pcLose);
+                  return newGame();
 
                 default:
                   return start();
@@ -242,12 +275,14 @@ ${msg.draw}`);
             case ballsCount.player <= 0:
               ballsCount.player = 0;
               ballsCount.pc = 10;
-              return alert(msg.playerLose);
+              alert(msg.playerLose);
+              return newGame();
 
             case ballsCount.pc <= 0:
               ballsCount.pc = 0;
               ballsCount.player = 10;
-              return alert(msg.pcLose);
+              alert(msg.pcLose);
+              return newGame();
 
             default:
               playerMove();
@@ -255,12 +290,14 @@ ${msg.draw}`);
                 case ballsCount.player <= 0:
                   ballsCount.player = 0;
                   ballsCount.pc = 10;
-                  return alert(msg.playerLose);
+                  alert(msg.playerLose);
+                  return newGame();
 
                 case ballsCount.pc <= 0:
                   ballsCount.pc = 0;
                   ballsCount.player = 10;
-                  return alert(msg.pcLose);
+                  alert(msg.pcLose);
+                  return newGame();
 
                 default:
                   return start();
