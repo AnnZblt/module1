@@ -78,8 +78,7 @@ ${ballsCount.player}`, '');
 
   const move = (balanceOne, balanceTwo, bet, choise, who) => {
     if (bet === null) {
-      alert(msg.seeU);
-      return {balanceOne, balanceTwo};
+      return bet;
     }
 
     switch (bet % 2 === choise) {
@@ -160,9 +159,13 @@ ${msg.draw}`);
       } else if (fate === 1) {
         const playerMove = move(ballsCount.player, ballsCount.pc,
           getPlayerBet(), getRandomNumber(0, 1), msg.player);
-        ballsCount.player = playerMove.balanceOne;
-        ballsCount.pc = playerMove.balanceTwo;
-        alert(`${msg.playerBalance} ${ballsCount.player}`);
+        if (playerMove === null) {
+          return alert(msg.seeU);
+        } else {
+          ballsCount.player = playerMove.balanceOne;
+          ballsCount.pc = playerMove.balanceTwo;
+          alert(`${msg.playerBalance} ${ballsCount.player}`);
+        }
 
         switch (true) {
           case ballsCount.player <= 0:
