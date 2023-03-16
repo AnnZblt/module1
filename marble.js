@@ -7,14 +7,40 @@
   };
   const figures = ['камень', 'бумага', 'ножницы'];
 
-  const getPcMove = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    const pcAnswer = Math.floor(Math.random() * (max - min + 1)) + min;
-    return pcAnswer;
+  const msg = {
+    isOdd: `Загаданное ботом число нечетное?
+"ОК" - да, "ОТМЕНА" - нет.`,
+    enterPlayerBet: `Введите вашу ставку.
+На вашем счету шариков: `,
+    tooHighBet: `Вы не можете поставить больше шариков, чем у вас есть.`,
+    incorrectBet: `Ваша ставка должна быть больше 0.`,
+    beginDraw: `Чтобы начать игру, нужно провести жеребьевку.
+Давайте решим, кто будет ходить первый?`,
+    drawQuestion: `Бот загадывает фигуру. Парируйте его атаку, выберите:
+  - камень
+  - ножницы
+  - бумага`,
+    escapeGame: `Уже уходите?`,
+    player: `Игрок`,
+    pc: `Бот`,
+    rpsPlayerWin: `Вы победили, поздравляем! Вы начинаете игру.`,
+    rpsPcWin: `Победил бот. Бот начинает игру.`,
+    draw: `Ничья. Играем снова.`,
+    playerRps: `Вы выбрали`,
+    pcRps: `Бот выбрал`,
+    figureEnter: `Для продолжения игры нужно ввести одну из 3-х фигур`,
+    seeU: `Поиграем в следующий раз :)`,
+    betWin: `Ставка сыграла.`,
+    betLose: `Ставка не сыграла.`,
+    ballsWin: `выиграл шариков:`,
+    ballsLose: `проиграл шариков:`,
+    pcLose: `У бота не осталось шариков, вы выиграли!`,
+    playerLose: `У вас не осталось шариков, вы проиграли.`,
+    playerBalance: `У вас осталось шариков`,
+    newGame: `Хотите сыграть еще раз?`,
   };
 
-  const getPcBet = (min, max) => {
+  const getRandomNumber = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     const pcAnswer = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -22,289 +48,163 @@
   };
 
   const getPlayerMove = () => {
-    const playerAgree = confirm(`Загаданное ботом число четное?
-"ОК" - да, "ОТМЕНА" - нет.`);
-    let playerAnswer;
-    if (playerAgree) {
-      return playerAnswer = 0;
-    } else {
-      return playerAnswer = 1;
-    }
+    const playerAgree = +confirm(msg.isOdd);
+    return playerAgree;
   };
 
   const getPlayerBet = () => {
-    const playerAnswer = +prompt(`Введите вашу ставку.
-На вашем счету шариков: ${ballsCount.player}`, '');
+    const playerAnswer = prompt(`${msg.enterPlayerBet} 
+${ballsCount.player}`, '');
 
     switch (true) {
-      case playerAnswer > ballsCount.player:
-        alert(`Вы не можете поставить больше шариков, чем у вас есть.`);
-        return getPlayerBet();
-
       case playerAnswer === null:
-        alert(`Вы не можете выйти из игры, пока не выиграете 
-или не проиграете.`);
-        return getPlayerBet();
+        alert(msg.escapeGame);
+        return playerAnswer;
+
+      case playerAnswer > ballsCount.player:
+        alert(msg.tooHighBet);
+        break;
 
       case playerAnswer === 0 || playerAnswer < 0 ||
-      !Number.isInteger(playerAnswer):
-        alert(`Ваша ставка должна быть больше 0.`);
-        return getPlayerBet();
+        !Number.isInteger(+playerAnswer):
+        alert(msg.incorrectBet);
+        break;
 
       default:
-        return playerAnswer;
+        return +playerAnswer;
     }
+    return getPlayerBet();
   };
 
-  const getRandomIntInclusive = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    const pcAnswer = Math.floor(Math.random() * (max - min + 1)) + min;
-    return pcAnswer;
+  const move = (balanceOne, balanceTwo, bet, choise, who) => {
+    if (bet === null) {
+      alert(msg.seeU);
+      return {balanceOne, balanceTwo};
+    }
+
+    switch (bet % 2 === choise) {
+      case false && balanceOne >= 10:
+        balanceOne += bet;
+        balanceTwo -= bet;
+        alert(`${msg.betWin} ${who} ${msg.ballsWin} ${bet + balanceTwo}`);
+        balanceOne = 10;
+        balanceTwo = 0;
+        return {balanceOne, balanceTwo};
+
+      case false:
+        balanceOne += bet;
+        balanceTwo -= bet;
+        alert(`${msg.betWin} ${who} ${msg.ballsWin} ${bet}`);
+        break;
+
+      default:
+        balanceOne -= bet;
+        balanceTwo += bet;
+        alert(`${msg.betLose} ${who} ${msg.ballsLose} ${bet}`);
+        break;
+    }
+    return {balanceOne, balanceTwo};
   };
 
-  const getFigure = () => {
-    const getFiguresMsg = {
-      beginGame: `Чтобы начать игру, нужно провести жеребьевку.
-Давайте решим, кто будет ходить первый?`,
-      mainQuestion: `Бот загадывает фигуру. Парируйте его атаку, выберите:
-    - камень
-    - ножницы
-    - бумага`,
-      escapeGame: `Уже уходите?`,
-    };
-    alert(getFiguresMsg.beginGame);
-    const answer = prompt(getFiguresMsg.mainQuestion, '');
-    let playerAnswer;
-    let allFigures = [];
+  const getFigure = (figures) => {
+    let answer = prompt(msg.drawQuestion, '');
 
     if (answer === null) {
-      alert(getFiguresMsg.escapeGame);
-      return playerAnswer = null;
+      alert(msg.escapeGame);
+      return answer;
     }
 
-    figures.map((item) => {
-      for (let i = 1; i <= item.length; i++) {
-        allFigures.push(item.slice(0, i));
-        if (allFigures.includes(answer.toLowerCase().trim())) {
-          allFigures = [];
-          return playerAnswer = item;
-        }
+    answer = answer.trim().toLowerCase();
+
+    return figures.map(item => item.slice(0, answer.length)).indexOf(answer);
+  };
+
+  const rps = () => {
+    const playerFigure = getFigure(['камень', 'бумага', 'ножницы']);
+    const pcFigure = getRandomNumber(0, 2);
+
+    if (playerFigure === null) {
+      return 0;
+    } else if (playerFigure === -1) {
+      alert(msg.figureEnter);
+      rps();
+    } else {
+      switch ((playerFigure - pcFigure + 3) % 3) {
+        case 1:
+          alert(`${msg.playerRps} ${figures[playerFigure]}
+${msg.pcRps} ${figures[pcFigure]}
+${msg.rpsPlayerWin}`);
+          return 1;
+
+        case 2:
+          alert(`${msg.playerRps} ${figures[playerFigure]}
+${msg.pcRps} ${figures[pcFigure]}
+${msg.rpsPcWin}`);
+          return 2;
+
+        default:
+          alert(`${msg.playerRps} ${figures[playerFigure]}
+${msg.pcRps} ${figures[pcFigure]}
+${msg.draw}`);
+          return rps();
       }
-    });
-
-    switch (true) {
-      case figures.includes(playerAnswer):
-        return playerAnswer = figures.indexOf(playerAnswer, 0);
-
-      default:
-        return playerAnswer = -1;
     }
   };
 
   const game = () => {
-    const msg = {
-      rpsPlayerWin: `Вы победили, поздравляем! Вы начинаете игру.`,
-      rpsPcWin: `Победил бот. Бот начинает игру.`,
-      draw: `Ничья. Играем снова.`,
-      playerRps: `Вы выбрали`,
-      pcRps: `Бот выбрал`,
-      figureEnter: `Для продолжения игры нужно ввести одну из 3-х фигур`,
-      seeU: `Поиграем в следующий раз :)`,
-      pcChoiseWin: `Бот угадал вашу ставку. Вы проиграли шариков:`,
-      playerChoiseWin: `Вы угадали ставку бота! Вы выиграли шариков:`,
-      pcBetWin: `Ваша ставка не сыграла. Вы проиграли шариков:`,
-      playerBetWin: `Ваша ставка сыграла! Вы выиграли шариков:`,
-      pcLose: `У бота не осталось шариков, вы выиграли!`,
-      playerLose: `У вас не осталось шариков, вы проиграли.`,
-      playerBalance: `У вас осталось шариков`,
-      newGame: `Хотите сыграть еще раз?`,
-    };
-
-    const newGame = () => {
-      if (ballsCount.pc === 0 || ballsCount.player === 0) {
-        const agree = confirm(msg.newGame);
-        if (agree) {
-          ballsCount.pc = 5;
-          ballsCount.player = 5;
-          return game();
-        } else {
-          return alert(msg.seeU);
-        }
-      }
-    };
-
-    const playerMove = () => {
-      const pcChoise = getPcMove(0, 1);
-      const playerBet = getPlayerBet();
-
-      if (playerBet % 2 === pcChoise) {
-        ballsCount.pc += playerBet;
-        ballsCount.player -= playerBet;
-        if (ballsCount.player < 0 || ballsCount.player > 10) {
-          alert(`${msg.pcChoiseWin} ${playerBet + ballsCount.player}`);
-        } else {
-          alert(`${msg.pcChoiseWin} ${playerBet}`);
-          alert(`${msg.playerBalance} ${ballsCount.player}`);
-        }
-      } else {
-        ballsCount.pc -= playerBet;
-        ballsCount.player += playerBet;
-        if (ballsCount.pс < 0 || ballsCount.player > 10) {
-          alert(`${msg.playerBetWin} ${playerBet + ballsCount.pc}`);
-        } else {
-          alert(`${msg.playerBetWin} ${playerBet}`);
-          alert(`${msg.playerBalance} ${ballsCount.player}`);
-        }
-      }
-    };
-
-    const pcMove = () => {
-      const playerChoise = getPlayerMove();
-      const pcBet = getPcBet(1, ballsCount.pc);
-
-      if (pcBet % 2 === playerChoise) {
-        ballsCount.player += pcBet;
-        ballsCount.pc -= pcBet;
-        if (ballsCount.pс < 0 || ballsCount.player > 10) {
-          alert(`${msg.playerChoiseWin} (${pcBet + ballsCount.pc})`);
-        }
-        alert(`${msg.playerChoiseWin} ${pcBet}`);
+    alert(msg.beginDraw);
+    let fate = rps();
+    const start = (fate) => {
+      if (fate === 0) {
+        return alert(msg.seeU);
+      } else if (fate === 1) {
+        const playerMove = move(ballsCount.player, ballsCount.pc,
+          getPlayerBet(), getRandomNumber(0, 1), msg.player);
+        ballsCount.player = playerMove.balanceOne;
+        ballsCount.pc = playerMove.balanceTwo;
         alert(`${msg.playerBalance} ${ballsCount.player}`);
-      } else {
-        ballsCount.player -= pcBet;
-        ballsCount.pc += pcBet;
-        if (ballsCount.player < 0 || ballsCount.player > 10) {
-          alert(`${msg.pcBetWin} ${pcBet + ballsCount.player}`);
-        } else {
-          alert(`${msg.pcBetWin} ${pcBet}`);
-          alert(`${msg.playerBalance} ${ballsCount.player}`);
-        }
-      }
-    };
 
-    const rps = () => {
-      const playerFigure = getFigure();
-      const pcFigure = getRandomIntInclusive(0, 2);
+        switch (true) {
+          case ballsCount.player <= 0:
+            alert(msg.playerLose);
+            break;
 
-      if (playerFigure === null) {
-        return 0;
-      } else if (playerFigure === -1) {
-        alert(msg.figureEnter);
-        rps();
-      } else {
-        switch ((playerFigure - pcFigure + 3) % 3) {
-          case 1:
-            alert(`${msg.playerRps} ${figures[playerFigure]}
-${msg.pcRps} ${figures[pcFigure]}
-${msg.rpsPlayerWin}`);
-            return 1;
-
-          case 2:
-            alert(`${msg.playerRps} ${figures[playerFigure]}
-${msg.pcRps} ${figures[pcFigure]}
-${msg.rpsPcWin}`);
-            return 2;
+          case ballsCount.pc <= 0:
+            alert(msg.pcLose);
+            break;
 
           default:
-            alert(`${msg.playerRps} ${figures[playerFigure]}
-${msg.pcRps} ${figures[pcFigure]}
-${msg.draw}`);
-            return rps();
+            fate = 2;
+            return start(fate);
+        }
+      } else {
+        const pcMove = move(ballsCount.pc, ballsCount.player,
+          getRandomNumber(1, ballsCount.pc), getPlayerMove(), msg.pc);
+        ballsCount.pc = pcMove.balanceOne;
+        ballsCount.player = pcMove.balanceTwo;
+        alert(`${msg.playerBalance} ${ballsCount.player}`);
+
+        switch (true) {
+          case ballsCount.player <= 0:
+            alert(msg.playerLose);
+            break;
+
+          case ballsCount.pc <= 0:
+            alert(msg.pcLose);
+            break;
+
+          default:
+            fate = 1;
+            return start(fate);
         }
       }
-    };
-
-    let fate = rps();
-
-    return function start() {
-      const newGame = () => {
-        if (ballsCount.pc === 0 || ballsCount.player === 0) {
-          const agree = confirm(msg.newGame);
-          if (agree) {
-            ballsCount.pc = 5;
-            ballsCount.player = 5;
-            rps();
-            return start();
-          } else {
-            return alert(msg.seeU);
-          }
-        }
-      };
-
-      switch (true) {
-        case fate === 0:
-          return alert(msg.seeU);
-        case fate === 1:
-          playerMove();
-          switch (true) {
-            case ballsCount.player <= 0:
-              ballsCount.player = 0;
-              ballsCount.pc = 10;
-              alert(msg.playerLose);
-              return newGame();
-
-            case ballsCount.pc <= 0:
-              ballsCount.pc = 0;
-              ballsCount.player = 10;
-              return alert(msg.pcLose);
-
-            default:
-              pcMove();
-              switch (true) {
-                case ballsCount.player <= 0:
-                  ballsCount.player = 0;
-                  ballsCount.pc = 10;
-                  alert(msg.playerLose);
-                  return newGame();
-
-                case ballsCount.pc <= 0:
-                  ballsCount.pc = 0;
-                  ballsCount.player = 10;
-                  alert(msg.pcLose);
-                  return newGame();
-
-                default:
-                  return start();
-              }
-          }
-
-        default:
-          pcMove();
-          switch (true) {
-            case ballsCount.player <= 0:
-              ballsCount.player = 0;
-              ballsCount.pc = 10;
-              alert(msg.playerLose);
-              return newGame();
-
-            case ballsCount.pc <= 0:
-              ballsCount.pc = 0;
-              ballsCount.player = 10;
-              alert(msg.pcLose);
-              return newGame();
-
-            default:
-              playerMove();
-              switch (true) {
-                case ballsCount.player <= 0:
-                  ballsCount.player = 0;
-                  ballsCount.pc = 10;
-                  alert(msg.playerLose);
-                  return newGame();
-
-                case ballsCount.pc <= 0:
-                  ballsCount.pc = 0;
-                  ballsCount.player = 10;
-                  alert(msg.pcLose);
-                  return newGame();
-
-                default:
-                  return start();
-              }
-          }
+      if (ballsCount.player === 0 || ballsCount.pc === 0) {
+        ballsCount.player = 5;
+        ballsCount.pc = 5;
+          confirm(msg.newGame) ? game() : alert(msg.seeU);
       }
     };
+    return start(fate);
   };
-  window.marble = game();
+  window.marble = game;
 })();
